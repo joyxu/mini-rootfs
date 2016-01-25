@@ -1,0 +1,160 @@
+Please see the LICENSE file for details on copying and usage.
+
+What is mini-rootfs:
+
+  Mini-rootfs combines tiny versions of many common UNIX utilities into a
+  single small rootfs. It provides minimalist replacements for most of the
+  utilities you usually find in bzip2, coreutils, dhcp, diffutils, e2fsprogs,
+  file, findutils, gawk, grep, inetutils, less, modutils, net-tools, procps,
+  sed, shadow, sysklogd, sysvinit, tar, util-linux, and vim.  The utilities
+  in mini-rootfs often have fewer options than their full-featured cousins;
+  however, the options that are included provide the expected functionality
+  and behave very much like their larger counterparts.
+
+  Mini-rootfs has been produced with size-optimization and limited resources
+  in mind, both to produce small binaries and to reduce run-time memory usage.
+  Mini-rootfs (usually together with uClibc) has also been used as a component
+  of "thin client" desktop systems, live-CD distributions, rescue disks,
+  installers, and so on.
+
+  Mini-rootfs provides a fairly complete POSIX environment for any small
+  system, both embedded environments and more full featured systems concerned
+  about space. Mini-rootfs is slowly working towards implementing the full
+  Single Unix Specification V3
+  (http://www.opengroup.org/onlinepubs/009695399/), but isn't there yet
+  (and for size reasons will probably support at most UTF-8 for
+  internationalization). We are also interested in passing the Linux Test
+  Project (http://ltp.sourceforge.net).
+
+----------------
+
+Using mini-rootfs:
+
+  Mini-rootfs is extremely configurable.  This allows you to include only
+  the components and options you need, thereby reducing binary size. Run 'make
+  config' or 'make menuconfig' to select the functionality that you wish to
+  enable.  (See 'make help' for more commands.)
+
+  The "standalone shell" mode is an easy way to try out mini-rootfs; this is
+  a command shell that calls the built-in applets without needing them to be
+  installed in the path. 
+
+----------------
+
+Downloading the current source code:
+
+  Source for the latest released version, as well as daily snapshots, can
+  always be downloaded from
+
+    https://github.com/open-estuary/mini-rootfs
+
+----------------
+
+Getting help:
+
+  when you find you need help, you can check out the mini-rootfs forums at
+
+  http://open-estuary.org/forums/
+
+  or contact us by
+
+  http://open-estuary.org/contact-us
+
+----------------
+
+Bugs:
+
+  if you find bugs, please submit a detailed bug report to the mini-rootfs
+  mailing list at support@open-estuary.org.  a well-written bug report should
+  include a transcript of a shell session that demonstrates the bad behavior
+  and enables anyone else to duplicate the bug on their own machine. the
+  following is such an example:
+
+    to: support@open-estuary.org
+    from: diligent@testing.open-estuary.org
+    subject: /bin/date doesn't work
+
+    package: mini-rootfs
+    version: 1.00
+
+    when i execute 'date' it produces unexpected results.
+    with gnu date i get the following output:
+
+	$ date
+	fri oct  8 14:19:41 mdt 2004
+
+    but when i use mini-rootfs date i get this instead:
+
+	$ date
+	illegal instruction
+
+    i am using debian unstable, kernel version 2.4.25-vrs2 on a netwinder,
+    and the latest uclibc from cvs.
+
+	-diligent
+
+  note the careful description and use of examples showing not only what
+  mini-rootfs does, but also a counter example showing what an equivalent app
+  does (or pointing to the text of a relevant standard).  Bug reports lacking
+  such detail may never be fixed...  Thanks for understanding.
+
+----------------
+
+Portability:
+
+  Mini-rootfs is developed and tested on Linux 2.4 and 2.6 kernels, compiled
+  with gcc (the unit-at-a-time optimizations in version 3.4 and later are
+  worth upgrading to get, but older versions should work), and linked against
+  uClibc (0.9.27 or greater) or glibc (2.2 or greater).  In such an
+  environment, the full set of mini-rootfs features should work, and if
+  anything doesn't we want to know about it so we can fix it.
+
+  There are many other environments out there, in which mini-rootfs may build
+  and run just fine.  We just don't test them.  Since mini-rootfs consists of
+  a large number of more or less independent applets, portability is a question
+  of which features work where.  Some mini-rootfs applets (such as cat and rm)
+  are highly portable and likely to work just about anywhere, while others
+  (such as insmod and losetup) require recent Linux kernels with recent C
+  libraries.
+
+  Earlier versions of Linux and glibc may or may not work, for any given
+  configuration.  Linux 2.2 or earlier should mostly work (there's still
+  some support code in things like mount.c) but this is no longer regularly
+  tested, and inherently won't support certain features (such as long files
+  and --bind mounts).  The same is true for glibc 2.0 and 2.1: expect a higher
+  testing and debugging burden using such old infrastructure. (The mini-rootfs
+  developers are not very interested in supporting these older versions, but
+  will probably accept small self-contained patches to fix simple problems.)
+
+  Some environments are not recommended.  Early versions of uClibc were buggy
+  and missing many features: upgrade.  Linking against libc5 or dietlibc is
+  not supported and not interesting to the mini-rootfs developers. (The first
+  is obsolete and has no known size or feature advantages over uClibc, the
+  second has known bugs that its developers have actively refused to fix.)
+  Ancient Linux kernels (2.0.x and earlier) are similarly uninteresting.
+
+Supported hardware:
+
+  Mini-rootfs in general will build on any architecture supported by gcc.  We
+  support both 32 and 64 bit platforms, and both big and little endian systems.
+
+  Under 2.4 Linux kernels, kernel module loading was implemented in a
+  platform-specific manner.  Mini-rootfs's insmod utility has been reported to
+  work under ARM, CRIS, H8/300, x86, ia64, x86_64, m68k, MIPS, PowerPC, S390,
+  SH3/4/5, Sparc, and v850e.  Anything else probably won't work.
+
+  The module loading mechanism for the 2.6 kernel is much more generic, and
+  we believe 2.6.x kernel module loading support should work on all
+  architectures supported by the kernel.
+
+----------------
+
+Please feed suggestions, bug reports, insults, and bribes back to the mini-rootfs
+mailing list:
+
+	support@open-estuary.org
+
+and/or maintainer:
+
+	Feng liang
+	<Chinafengliang@163.com>
