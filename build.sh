@@ -6,24 +6,16 @@
 # (C) 2013 Huawei Software Engineering.
 
 export CROSS_COMPILE=aarch64-linux-gnu-
-export CC= $(CROSS_COMPILE)gcc
+export CC=${CROSS_COMPILE}gcc
 export ARCH=arm64
-PATH_CURRENT=$PWD
-PATH_ROOTFS=${PWD}/mini-rootfs
+PATH_ROOTFS=${PWD}/mini-rootfs-arm64
 PATH_APPLET=${PWD}/applets
 
 # build file system hierarchy
 mkdir -p ${PATH_ROOTFS}
 pushd ${PATH_ROOTFS}
-mkdir -p dev home opt root sys boot etc lib mnt proc run tmp var 
+mkdir -p bin boot dev etc home lib mnt opt proc root run sbin sys tmp usr var 
 popd
-
-# install applet
-for patch in `ls applets`
-do
-	echo install applet: ${patch} ...
-	tar -zxvf ${PATH_APPLET}/${patch} -C ${PATH_ROOTFS}
-done
 
 # build busybox
 if [ -d busybox ]; then
@@ -40,7 +32,15 @@ make install
 
 PATH_INSTALL=$(grep -i CONFIG_PREFIX .config | cut -d '"' -f 2)
 cp -frap ${PATH_INSTALL}/* ${PATH_ROOTFS}
+ln -s /sbin/init ${PATH_ROOTFS}/init
 popd
+
+# install applet
+for patch in `ls applets/*.tar.gz`
+do
+	echo install applet: ${patch} ...
+	tar -zxvf ${PWD}/${patch} -C ${PATH_ROOTFS}
+done
 
 # build dropbear
 if [ -d dropbear ]; then
@@ -56,20 +56,21 @@ aclocal
 autoheader
 autoconf
 ./configure --prefix=${PATH_ROOTFS} --host=aarch64-linux-gnu --disable-zlib \
-	CC=aarch64-linux-gnu-gcc \
+	CC=${CROSS_COMPILE}gcc \
 	LDFLAGS="-Wl,--gc-sections" \
 	CFLAGS="-ffunction-sections -fdata-sections -Os"
 
 make PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp" strip
 make PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp" install
+ln -s /bin/dbclient ${PATH_ROOTFS}/usr/bin/dbclient
 popd
 
 # build dmidecode
 
 # compress file system
 pushd ${PATH_ROOTFS}
-find . | cpio -o -H newc | gzip > ../mini-rootfs.cpio.gz
+find . | cpio -o -H newc | gzip > ../mini-rootfs-arm64.cpio.gz
 popd
 
 # finished
-echo Congratulations, the mini-rootfs.cpio.gz has been created!
+echo Congratulations, the mini-rootfs-arm64.cpio.gz has been created!
