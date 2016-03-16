@@ -102,7 +102,7 @@ Bugs:
 
 Portability:
 
-  Mini-rootfs is developed and tested on Linux 2.4 and 2.6 kernels, compiled
+  Mini-rootfs is developed and tested on Linux 4.1 and 3.19.0 kernels, compiled
   with gcc (the unit-at-a-time optimizations in version 3.4 and later are
   worth upgrading to get, but older versions should work), and linked against
   uClibc (0.9.27 or greater) or glibc (2.2 or greater).  In such an
