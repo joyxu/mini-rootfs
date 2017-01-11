@@ -100,10 +100,10 @@ popd
 # build busybox
 if [ -d busybox ]; then
 	echo update busybox
-	git pull origin master
+	#git pull origin master
 else
 	echo download busybox
-	git clone git://busybox.net/busybox.git
+	#git clone git://busybox.net/busybox.git
 fi
 
 pushd busybox/

@@ -1,0 +1,11 @@
+export PS1="\e[1;32mestuary:\w$\e[m "
+
+if [ ! -z ${SSH_TTY} ]; then
+	export PATH=/sbin:/usr/sbin:/bin:/usr/bin
+fi
+
+alias ll='ls -alF'
+
+if [ -d "/etc/notifier" ]; then
+	run-parts /etc/notifier
+fi

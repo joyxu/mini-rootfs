@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo -e "\033[1;32mWelcome to Mini Linux"
+printf "%s %s %s\n" "$(uname -o)" "$(uname -r)" "$(uname -m)"
+echo -e "Version: 1.1.2\033[0m"
+
+# logo
+cat /etc/notifier/logo-text

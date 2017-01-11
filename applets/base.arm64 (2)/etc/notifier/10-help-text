@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Documentation: http://open-estuary.org"
+echo "E-mail: Chinafengliang@163.com"
+printf "Last login: %s\n" "$(date)"
