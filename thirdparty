@@ -1,0 +1,18 @@
+Tool integration
+================
+If you need to integrate your own tools or libraries, the following steps should be useful to you.
+
+step 1
+------
+Extract everything from mini-rootfs.cpio.gz
+$ gunzip mini-rootfs.cpio.gz
+$ cpio  -i  -d  -H  newc  -F mini-rootfs.cpio  --no-absolute-filenames
+
+step 2
+------
+Integrate your own tools or libraries.
+
+step 3
+------
+Compress everything into mini-rootfs.cpio.gz
+$ find  .  |  cpio  -o  -H  newc  |  gzip  >  ${PROJDIR}/mini-rootfs.cpio.gz
