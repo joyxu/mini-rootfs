@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script to auto-build root file system. 
-# 
+# Script to auto-build root file system.
+#
 # Author: Fengliang <ChinaFengliang@163.com>
 # (C) 2013 Huawei Software Engineering.
 
@@ -20,7 +20,7 @@ ARCH=              set architecture of processor
 CROSS_COMPILE=     set cross-compile tools
 
 Report bugs to <ChinaFengliang@163.com>."
-																							 
+
 while test $# != 0
 do
 	case $1 in
@@ -93,16 +93,17 @@ echo APPLETS=$APPLETS
 # build file system hierarchy
 mkdir -p ${PATH_ROOTFS}
 pushd ${PATH_ROOTFS}
-mkdir -p bin boot dev etc home lib mnt opt proc root run sbin sys tmp usr var 
+mkdir -p bin boot dev etc home lib mnt opt proc root run sbin sys tmp usr var
+chmod 700 root
 popd
 
 # build busybox
 if [ -d busybox ]; then
 	echo update busybox
-	git pull origin master
+	#git pull origin master
 else
 	echo download busybox
-	git clone git://busybox.net/busybox.git
+	#git clone git://busybox.net/busybox.git
 fi
 
 pushd busybox/
@@ -127,34 +128,10 @@ do
 	tar -zxvf ${PWD}/${patch} -C ${PATH_ROOTFS}
 done
 
-# build dropbear
-if [ -d dropbear ]; then
-	echo update dropbear
-	git pull origin master
-else
-	echo download dropbear
-	git clone https://github.com/mkj/dropbear.git
-fi
-
-pushd dropbear/
-git clean -dxf
-aclocal
-autoheader
-autoconf
-
-./configure --prefix=${PATH_ROOTFS} --host=${HOST} --disable-zlib \
-	CC=${CROSS_COMPILE}gcc \
-	LDFLAGS="-Wl,--gc-sections" \
-	CFLAGS="-ffunction-sections -fdata-sections -Os"
-
-make PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp" strip
-make PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp" install
-ln -s /bin/dbclient ${PATH_ROOTFS}/usr/bin/dbclient
-popd
-
 # compress file system
+sudo chown -R root:root ${TARGET}
 pushd ${PATH_ROOTFS}
-find . | cpio -o -H newc | gzip > ../${TARGET}.cpio.gz
+sudo find . | sudo cpio -o -H newc | sudo gzip > ../${TARGET}.cpio.gz
 popd
 
 # finished
